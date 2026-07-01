@@ -1,0 +1,248 @@
+%General Mission Analysis Tool(GMAT) Script
+%Created: 2025-11-12 23:52:15
+
+
+%----------------------------------------
+%---------- User-Defined Celestial Bodies
+%----------------------------------------
+
+Create Moon Europa;
+Europa.NAIFId = 502;
+Europa.SpiceFrameId = '10021';
+Europa.OrbitSpiceKernelName = {'C:\Users\User\OneDrive - University of Bristol\space systems\jup365 (1).bsp'};
+Europa.PlanetarySpiceKernelName = {'C:\Users\User\OneDrive - University of Bristol\space systems\pck00011.tpc.txt'};
+Europa.OrbitColor = Tan;
+Europa.TargetColor = DarkGray;
+Europa.EquatorialRadius = 1560.8;
+Europa.Flattening = 0;
+Europa.Mu = 3202.739;
+Europa.PosVelSource = 'SPICE';
+Europa.CentralBody = 'Jupiter';
+Europa.RotationDataSource = 'IAUSimplified';
+Europa.OrientationEpoch = 21545;
+Europa.SpinAxisRAConstant = 268.049;
+Europa.SpinAxisRARate = 0;
+Europa.SpinAxisDECConstant = 81.34999999999999;
+Europa.SpinAxisDECRate = 0;
+Europa.RotationConstant = 176.425;
+Europa.RotationRate = 204.858739;
+Europa.TextureMapFileName = 'GenericCelestialBody.jpg';
+Europa.3DModelFile = '';
+Europa.3DModelOffsetX = 0;
+Europa.3DModelOffsetY = 0;
+Europa.3DModelOffsetZ = 0;
+Europa.3DModelRotationX = 0;
+Europa.3DModelRotationY = 0;
+Europa.3DModelRotationZ = 0;
+Europa.3DModelScale = 10;
+
+%----------------------------------------
+%---------- Spacecraft
+%----------------------------------------
+
+Create Spacecraft Europa_Clipper;
+Europa_Clipper.DateFormat = UTCGregorian;
+Europa_Clipper.Epoch = '20 Apr 2030 11:01:57.039';
+Europa_Clipper.CoordinateSystem = Jupiter_coordinate_system;
+Europa_Clipper.DisplayStateType = Keplerian;
+Europa_Clipper.SMA = 1354992.662129884;
+Europa_Clipper.ECC = 0.5074315154547829;
+Europa_Clipper.INC = 0.2095128295318635;
+Europa_Clipper.RAAN = 360;
+Europa_Clipper.AOP = 359.1563297476227;
+Europa_Clipper.TA = 359.6517378884533;
+Europa_Clipper.DryMass = 850;
+Europa_Clipper.Cd = 2.2;
+Europa_Clipper.Cr = 1.8;
+Europa_Clipper.DragArea = 15;
+Europa_Clipper.SRPArea = 1;
+Europa_Clipper.SPADDragScaleFactor = 1;
+Europa_Clipper.SPADSRPScaleFactor = 1;
+Europa_Clipper.AtmosDensityScaleFactor = 1;
+Europa_Clipper.ExtendedMassPropertiesModel = 'None';
+Europa_Clipper.NAIFId = -10004001;
+Europa_Clipper.NAIFIdReferenceFrame = -9004001;
+Europa_Clipper.OrbitColor = Red;
+Europa_Clipper.TargetColor = Teal;
+Europa_Clipper.OrbitErrorCovariance = [ 1e+70 0 0 0 0 0 ; 0 1e+70 0 0 0 0 ; 0 0 1e+70 0 0 0 ; 0 0 0 1e+70 0 0 ; 0 0 0 0 1e+70 0 ; 0 0 0 0 0 1e+70 ];
+Europa_Clipper.CdSigma = 1e+70;
+Europa_Clipper.CrSigma = 1e+70;
+Europa_Clipper.Id = 'SatId';
+Europa_Clipper.Attitude = CoordinateSystemFixed;
+Europa_Clipper.SPADSRPInterpolationMethod = Bilinear;
+Europa_Clipper.SPADSRPScaleFactorSigma = 1e+70;
+Europa_Clipper.SPADDragInterpolationMethod = Bilinear;
+Europa_Clipper.SPADDragScaleFactorSigma = 1e+70;
+Europa_Clipper.AtmosDensityScaleFactorSigma = 1e+70;
+Europa_Clipper.ModelFile = 'aura.3ds';
+Europa_Clipper.ModelOffsetX = 0;
+Europa_Clipper.ModelOffsetY = 0;
+Europa_Clipper.ModelOffsetZ = 0;
+Europa_Clipper.ModelRotationX = 0;
+Europa_Clipper.ModelRotationY = 0;
+Europa_Clipper.ModelRotationZ = 0;
+Europa_Clipper.ModelScale = 1;
+Europa_Clipper.AttitudeDisplayStateType = 'Quaternion';
+Europa_Clipper.AttitudeRateDisplayStateType = 'AngularVelocity';
+Europa_Clipper.AttitudeCoordinateSystem = Jupiter_coordinate_system;
+Europa_Clipper.EulerAngleSequence = '321';
+
+
+
+
+
+
+
+%----------------------------------------
+%---------- ForceModels
+%----------------------------------------
+
+Create ForceModel DefaultProp_ForceModel;
+DefaultProp_ForceModel.CentralBody = Jupiter;
+DefaultProp_ForceModel.PointMasses = {Europa, Jupiter};
+DefaultProp_ForceModel.Drag = None;
+DefaultProp_ForceModel.SRP = Off;
+DefaultProp_ForceModel.RelativisticCorrection = Off;
+DefaultProp_ForceModel.ErrorControl = RSSStep;
+
+%----------------------------------------
+%---------- Propagators
+%----------------------------------------
+
+Create Propagator DefaultProp;
+DefaultProp.FM = DefaultProp_ForceModel;
+DefaultProp.Type = RungeKutta89;
+DefaultProp.InitialStepSize = 60;
+DefaultProp.Accuracy = 9.999999999999999e-12;
+DefaultProp.MinStep = 0.001;
+DefaultProp.MaxStep = 2700;
+DefaultProp.MaxStepAttempts = 50;
+DefaultProp.StopIfAccuracyIsViolated = true;
+
+%----------------------------------------
+%---------- Burns
+%----------------------------------------
+
+Create ImpulsiveBurn DSM_Burn_1;
+DSM_Burn_1.CoordinateSystem = Jupiter_coordinate_system;
+DSM_Burn_1.Element1 = 0;
+DSM_Burn_1.Element2 = 0;
+DSM_Burn_1.Element3 = 0;
+DSM_Burn_1.DecrementMass = false;
+DSM_Burn_1.Isp = 300;
+DSM_Burn_1.GravitationalAccel = 9.81;
+
+Create ImpulsiveBurn DSM_Burn_2;
+DSM_Burn_2.CoordinateSystem = Jupiter_coordinate_system;
+DSM_Burn_2.Element1 = 0;
+DSM_Burn_2.Element2 = 0;
+DSM_Burn_2.Element3 = 0;
+DSM_Burn_2.DecrementMass = false;
+DSM_Burn_2.Isp = 300;
+DSM_Burn_2.GravitationalAccel = 9.81;
+
+%----------------------------------------
+%---------- Coordinate Systems
+%----------------------------------------
+
+Create CoordinateSystem Jupiter_coordinate_system;
+Jupiter_coordinate_system.Origin = Jupiter;
+Jupiter_coordinate_system.Axes = MJ2000Eq;
+
+%----------------------------------------
+%---------- Solvers
+%----------------------------------------
+
+Create DifferentialCorrector DC1;
+DC1.ShowProgress = false;
+DC1.ReportStyle = Normal;
+DC1.ReportFile = 'DifferentialCorrectorDC1.data';
+DC1.MaximumIterations = 50;
+DC1.DerivativeMethod = ForwardDifference;
+DC1.Algorithm = NewtonRaphson;
+
+%----------------------------------------
+%---------- Subscribers
+%----------------------------------------
+
+Create OrbitView Jovian_Orbit_View;
+Jovian_Orbit_View.SolverIterations = Current;
+Jovian_Orbit_View.UpperLeft = [ 0 0 ];
+Jovian_Orbit_View.Size = [ 0.5 0.4504950495049505 ];
+Jovian_Orbit_View.RelativeZOrder = 90;
+Jovian_Orbit_View.Maximized = false;
+Jovian_Orbit_View.Add = {Europa_Clipper, Europa, Jupiter};
+Jovian_Orbit_View.CoordinateSystem = Jupiter_coordinate_system;
+Jovian_Orbit_View.DrawObject = [ true true true ];
+Jovian_Orbit_View.DataCollectFrequency = 1;
+Jovian_Orbit_View.UpdatePlotFrequency = 50;
+Jovian_Orbit_View.NumPointsToRedraw = 0;
+Jovian_Orbit_View.ShowPlot = true;
+Jovian_Orbit_View.MaxPlotPoints = 20000;
+Jovian_Orbit_View.ShowLabels = true;
+Jovian_Orbit_View.ViewPointReference = Jupiter;
+Jovian_Orbit_View.ViewPointVector = [ 0 0 1000000 ];
+Jovian_Orbit_View.ViewDirection = Jupiter;
+Jovian_Orbit_View.ViewScaleFactor = 1;
+Jovian_Orbit_View.ViewUpCoordinateSystem = Jupiter_coordinate_system;
+Jovian_Orbit_View.ViewUpAxis = Z;
+Jovian_Orbit_View.EclipticPlane = Off;
+Jovian_Orbit_View.XYPlane = On;
+Jovian_Orbit_View.WireFrame = Off;
+Jovian_Orbit_View.Axes = On;
+Jovian_Orbit_View.Grid = Off;
+Jovian_Orbit_View.SunLine = Off;
+Jovian_Orbit_View.UseInitialView = On;
+Jovian_Orbit_View.StarCount = 7000;
+Jovian_Orbit_View.EnableStars = On;
+Jovian_Orbit_View.EnableConstellations = On;
+
+Create GroundTrackPlot DefaultGroundTrackPlot;
+DefaultGroundTrackPlot.SolverIterations = Current;
+DefaultGroundTrackPlot.UpperLeft = [ 0 0.4430693069306931 ];
+DefaultGroundTrackPlot.Size = [ 0.5 0.4504950495049505 ];
+DefaultGroundTrackPlot.RelativeZOrder = 92;
+DefaultGroundTrackPlot.Maximized = false;
+DefaultGroundTrackPlot.Add = {Europa_Clipper, Earth};
+DefaultGroundTrackPlot.DataCollectFrequency = 1;
+DefaultGroundTrackPlot.UpdatePlotFrequency = 50;
+DefaultGroundTrackPlot.NumPointsToRedraw = 0;
+DefaultGroundTrackPlot.ShowPlot = true;
+DefaultGroundTrackPlot.MaxPlotPoints = 20000;
+DefaultGroundTrackPlot.CentralBody = Jupiter;
+DefaultGroundTrackPlot.TextureMap = 'Jupiter_HermesCelestiaMotherlode.jpg';
+
+Create ReportFile ReportFile1;
+ReportFile1.SolverIterations = Current;
+ReportFile1.UpperLeft = [ 0.09294117647058824 0.1955445544554456 ];
+ReportFile1.Size = [ 0.5982352941176471 0.7957920792079208 ];
+ReportFile1.RelativeZOrder = 128;
+ReportFile1.Maximized = true;
+ReportFile1.Filename = 'ReportFile1.txt';
+ReportFile1.Precision = 16;
+ReportFile1.Add = {Europa_Clipper.UTCGregorian, Europa_Clipper.Jupiter.SMA, Europa_Clipper.Jupiter_coordinate_system.RAAN, Europa_Clipper.Jupiter_coordinate_system.INC, Europa_Clipper.Jupiter.ECC, Europa_Clipper.Jupiter_coordinate_system.AOP, Europa_Clipper.Jupiter.TA};
+ReportFile1.WriteHeaders = true;
+ReportFile1.LeftJustify = On;
+ReportFile1.ZeroFill = Off;
+ReportFile1.FixedWidth = true;
+ReportFile1.Delimiter = ' ';
+ReportFile1.ColumnWidth = 23;
+ReportFile1.WriteReport = true;
+ReportFile1.AppendToExistingFile = false;
+
+
+%----------------------------------------
+%---------- Mission Sequence
+%----------------------------------------
+
+BeginMissionSequence;
+Propagate DefaultProp(Europa_Clipper) {Europa_Clipper.Jupiter.Apoapsis, StopTolerance = 5};
+Target DC1 {SolveMode = Solve, ExitMode = DiscardAndContinue, ShowProgressWindow = true};
+   Vary DC1(DSM_Burn_1.Element1 = 0, {Perturbation = 0.0001, Lower = -20, Upper = 20, MaxStep = 0.2, AdditiveScaleFactor = 0.0, MultiplicativeScaleFactor = 1.0});
+   Vary DC1(DSM_Burn_1.Element2 = 0, {Perturbation = 0.0001, Lower = -20, Upper = 20, MaxStep = 0.2, AdditiveScaleFactor = 0.0, MultiplicativeScaleFactor = 1.0});
+   Vary DC1(DSM_Burn_1.Element3 = 0, {Perturbation = 0.0001, Lower = -20, Upper = 20, MaxStep = 0.2, AdditiveScaleFactor = 0.0, MultiplicativeScaleFactor = 1.0});
+   Maneuver DSM_Burn_1(Europa_Clipper);
+   Propagate DefaultProp(Europa_Clipper) {Europa_Clipper.Jupiter.Periapsis, StopTolerance = 1e-06};
+   Achieve DC1(Europa_Clipper.Europa.RMAG = 1660, {Tolerance = 5});
+   Report ReportFile1 Europa_Clipper.UTCGregorian Europa_Clipper.Jupiter.SMA Europa_Clipper.Jupiter_coordinate_system.RAAN Europa_Clipper.Jupiter.ECC Europa_Clipper.Jupiter_coordinate_system.AOP Europa_Clipper.Jupiter_coordinate_system.INC Europa_Clipper.Jupiter.TA;
+EndTarget;  % For targeter DC1
